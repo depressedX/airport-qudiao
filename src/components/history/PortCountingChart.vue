@@ -34,8 +34,8 @@
             let that = this
             return {
                 chart: null,
-                mapedEnterData: {num: [], content: []},
-                mapedLeaveData: {num: [], content: []},
+                mapedNorthData: {num: [], content: []},
+                mapedSouthData: {num: [], content: []},
                 option: {
                     legend:{
                         show:true
@@ -49,7 +49,7 @@
 
                             return `${params[0].axisValue}后<br>`
                                 + params.map(
-                                    v => `${v.seriesName}:${v.data}<br>${(v.seriesName === '进港' ? that.mapedEnterData : that.mapedLeaveData).content[v.dataIndex].join('<br>')}`
+                                    v => `${v.seriesName}:${v.data}<br>${(v.seriesName === '进港' ? that.mapedNorthData : that.mapedSouthData).content[v.dataIndex].join('<br>')}`
                                 )
                                     .join('<br>')
                         }
@@ -112,7 +112,7 @@
                             type: this.type,
                             stack: this.type + (this.type === 'bar' ? '' : '1'),
                             get data() {
-                                return that.dataType === that.ENTER ? [] : that.mapedLeaveData.num
+                                return that.dataType === that.NORTH ? [] : that.mapedSouthData.num
                             }
                         },
                         {
@@ -120,7 +120,7 @@
                             type: this.type,
                             stack: this.type + (this.type === 'bar' ? '' : '2'),
                             get data() {
-                                return that.dataType === that.LEAVE ? [] : that.mapedEnterData.num
+                                return that.dataType === that.SOUTH ? [] : that.mapedNorthData.num
                             }
                         }
                     ],
@@ -159,8 +159,8 @@
             updateSeries() {
 
                 // 更新映射后的航班数
-                this.mapedEnterData = this.mapPortData(this.enterHistory,this.ENTER)
-                this.mapedLeaveData = this.mapPortData(this.leaveHistory,this.LEAVE)
+                this.mapedEnterData = this.mapPortData(this.enterHistory,this.NORTH)
+                this.mapedLeaveData = this.mapPortData(this.leaveHistory,this.SOUTH)
 
                 this.chart.setOption(this.option)
             },
@@ -173,12 +173,12 @@
             },
 
             getInterval(v,dataType){
-                if (dataType===this.ENTER){
+                if (dataType===this.NORTH){
                     return{
                         left:v.pass1,
                         right:v.ata
                     }
-                }else if (dataType === this.LEAVE){
+                }else if (dataType === this.SOUTH){
                     return{
                         left:v.atd,
                         right:v.atd+7*60*1000
@@ -210,8 +210,8 @@
             }
         },
         computed: {
-            ENTER: () => state.dataState.ENTER,
-            LEAVE: () => state.dataState.LEAVE,
+            NORTH: () => state.dataState.NORTH,
+            SOUTH: () => state.dataState.SOUTH,
             BOTH: () => state.dataState.BOTH,
 
 

@@ -17,8 +17,8 @@
         computed:{
             dataType:()=>state.historyDataType,
 
-            ENTER:()=>state.dataState.ENTER,
-            LEAVE:()=>state.dataState.LEAVE,
+            NORTH:()=>state.dataState.NORTH,
+            SOUTH:()=>state.dataState.SOUTH,
             BOTH:()=>state.dataState.BOTH,
         },
         methods:{

@@ -1,8 +1,8 @@
 <template>
     <div class="data-type-control-button-panel">
-        <el-button size="medium"  @click="changeDataType(LEAVE)">出港表</el-button>
-        <el-button size="medium"  @click="changeDataType(ENTER)">进港表</el-button>
-        <el-button size="medium"  @click="changeDataType(BOTH)">出港进港表</el-button>
+        <el-button size="medium"  @click="changeDataType(SOUTH)">南扇表</el-button>
+        <el-button size="medium"  @click="changeDataType(NORTH)">北扇表</el-button>
+        <el-button size="medium"  @click="changeDataType(BOTH)">南扇北扇表</el-button>
     </div>
 </template>
 
@@ -17,8 +17,8 @@
         computed:{
             dataType:()=>state.dataState.dataType,
 
-            ENTER:()=>state.dataState.ENTER,
-            LEAVE:()=>state.dataState.LEAVE,
+            NORTH:()=>state.dataState.NORTH,
+            SOUTH:()=>state.dataState.SOUTH,
             BOTH:()=>state.dataState.BOTH,
         },
         methods:{

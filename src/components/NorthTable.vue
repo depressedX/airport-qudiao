@@ -1,11 +1,12 @@
 <template>
         <el-table
-                :data="leavePortData"
+                :data="northData"
                 :row-class-name="tableRowClassName"
-                class="customLeaveTable"
+                class="customNorthTable"
                 :default-sort = "{prop: 'minutes', order: 'ascending'}"
                 header-cell-class-name="custom-header-cell"
-                cell-class-name="custom-cell">
+                cell-class-name="custom-cell"
+                >
             <el-table-column
                     prop="arcid"
                     label="航班号"
@@ -22,7 +23,7 @@
             <el-table-column
                     prop="ades"
                     label="目的机场"
-                    width="70"
+                    min-width="70"
                     align="center"
                     sortable/>
             <el-table-column
@@ -33,33 +34,43 @@
                     min-width="65"
                     sortable/>
             <el-table-column
-                    prop="eobt"
-                    label="预起时间"
-                    class-name="custom-column-eobt"
-                    min-width="120"
-                    align="center"
-                    sortable>
-                <template slot-scope="scope">
-                    {{scope.row.eobt?scope.row.eobt:'' | date}}<br>
-                    {{scope.row.eobt?scope.row.eobt:'' | time}}
-                </template>
-            </el-table-column>
-            <el-table-column
                     prop="atd"
-                    label="实飞时间"
+                    label="实际起飞时间"
+                    class-name="custom-column-atd"
                     min-width="60"
                     align="center"
                     sortable>
                 <template slot-scope="scope">
-                    {{scope.row.atd?scope.row.atd:'' | time}}
+                    {{scope.row.atd?scope.row.atd:'未起飞' | time}}
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="eta"
+                    label="预落时间"
+                    min-width="60"
+                    align="center"
+                    sortable>
+                <template slot-scope="scope">
+                    {{scope.row.eta?scope.row.eta:'' | time}}
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="ata"
+                    label="实际降落时间"
+                    sortable
+                    align="center"
+                    width="60">
+                <template slot-scope="scope">
+                    {{scope.row.ata?scope.row.ata:'' | time}}
                 </template>
             </el-table-column>
             <el-table-column
                     prop="pass1"
                     label="进入时间"
-                    min-width="60"
+                    class-name="custom-column-pass1"
+                    sortable
                     align="center"
-                    sortable>
+                    min-width="60">
                 <template slot-scope="scope">
                     {{scope.row.pass1?scope.row.pass1:'' | time}}
                 </template>
@@ -67,9 +78,9 @@
             <el-table-column
                     prop="pass2"
                     label="离开时间"
-                    min-width="60"
+                    sortable
                     align="center"
-                    sortable>
+                    min-width="60">
                 <template slot-scope="scope">
                     {{scope.row.pass2?scope.row.pass2:'' | time}}
                 </template>
@@ -77,9 +88,9 @@
             <el-table-column
                     prop="minutes"
                     label="剩余时间"
-                    min-width="60"
+                    sortable
                     align="center"
-                    sortable/>
+                    min-width="40"/>
         </el-table>
 </template>
 
@@ -92,7 +103,7 @@
         getters = store.getters
 
     export default {
-        name: "leave-port-table",
+        name: "north-table",
 
         methods: {
             tableRowClassName(v) {
@@ -102,52 +113,47 @@
             formatTime: Formatter.formatTime
         },
         computed: {
-            leavePortData: () => getters.leavePortData
+            northData: () => getters.northData
         },
         filters: {
-            time: value => (typeof value === 'number' || value instanceof Number) ? Formatter.formatTime(value) : value,
-            date: value => (typeof value === 'number' || value instanceof Number) ? Formatter.formatDate(value) : value,
+            time: value => (typeof value === 'number' || value instanceof Number) ? Formatter.formatTime(value) : value
         }
     }
 </script>
 <style>
-    .customLeaveTable{
+    .customNorthTable{
         font-size: 18px;
         color: #3d3d3d;
     }
-    .customLeaveTable thead{
+    .customNorthTable thead{
         color: #3d3d3d;
     }
-    .customLeaveTable .row-danger {
+    .customNorthTable .row-danger {
         background-color: rgb(242, 222, 222);
     }
 
-    .customLeaveTable .row-normal {
+    .customNorthTable .row-normal {
         background-color: rgb(223, 240, 216);
     }
-    .customLeaveTable .custom-header-cell{
+    .customNorthTable .custom-header-cell{
         background-color: #99bfe6 !important;
     }
-
-    .customLeaveTable .custom-cell{
+    .customNorthTable .custom-cell{
         padding-top: 4px;
         padding-bottom: 4px;
     }
-    .customLeaveTable .custom-cell .cell {
+    .customNorthTable .custom-cell .cell{
         padding-left: 4px;
         padding-right: 4px;
     }
-    
-    /*需要加粗的列*/
-    .customLeaveTable .custom-column-arcid,.customLeaveTable .custom-column-status,
-    .customLeaveTable .custom-column-eobt{
+    .customNorthTable .custom-column-arcid,.customNorthTable .custom-column-status,
+    .customNorthTable .custom-column-pass1,.customNorthTable .custom-column-atd{
         font-weight: bold;
     }
-    
-    .customLeaveTable .descending .sort-caret.descending {
+    .customNorthTable .descending .sort-caret.descending {
         border-top-color: #3d3d3d;
     }
-    .customLeaveTable .ascending .sort-caret.ascending {
+    .customNorthTable .ascending .sort-caret.ascending {
         border-bottom-color: #3d3d3d;
     }
 </style>

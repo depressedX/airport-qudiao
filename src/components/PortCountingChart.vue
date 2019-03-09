@@ -33,8 +33,8 @@
             let that = this
             return {
                 chart: null,
-                mapedEnterData: {num: [], content: []},
-                mapedLeaveData: {num: [], content: []},
+                mapedNorthData: {num: [], content: []},
+                mapedSouthData: {num: [], content: []},
                 option: {
                     legend: {
                         show: true,
@@ -49,7 +49,7 @@
 
                             return `${params[0].axisValue}后<br>`
                                 + params.map(
-                                    v => `${v.seriesName}:${v.data}<br>${(v.seriesName === '进港' ? that.mapedEnterData : that.mapedLeaveData).content[v.dataIndex].join('<br>')}`
+                                    v => `${v.seriesName}:${v.data}<br>${(v.seriesName === '北扇' ? that.mapedNorthData : that.mapedSouthData).content[v.dataIndex].join('<br>')}`
                                 )
                                     .join('<br>')
                         }
@@ -108,19 +108,19 @@
                         ],
                     series: [
                         {
-                            name: '出港',
+                            name: '南扇',
                             type: this.type,
                             stack: this.type + (this.type === 'bar' ? '' : '1'),
                             get data() {
-                                return that.dataType === that.ENTER ? [] : that.mapedLeaveData.num
+                                return that.dataType === that.NORTH ? [] : that.mapedSouthData.num
                             }
                         },
                         {
-                            name: '进港',
+                            name: '北扇',
                             type: this.type,
                             stack: this.type + (this.type === 'bar' ? '' : '2'),
                             get data() {
-                                return that.dataType === that.LEAVE ? [] : that.mapedEnterData.num
+                                return that.dataType === that.SOUTH ? [] : that.mapedNorthData.num
                             }
                         }
                     ],
@@ -172,8 +172,8 @@
             // 更新this.option的series
             updateSeries() {
                 // 更新映射后的航班数
-                this.mapedEnterData = this.mapPortData(this.enterPortData)
-                this.mapedLeaveData = this.mapPortData(this.leavePortData)
+                this.mapedNorthData = this.mapPortData(this.northData)
+                this.mapedSouthData = this.mapPortData(this.southData)
 
 
                 // 更改当前时间显示轴
@@ -214,28 +214,27 @@
                     step: state => state.dataState.step,
                     duration: state => state.dataState.duration,
                     dataType: state => state.dataState.dataType,
-                    ENTER: state => state.dataState.ENTER,
-                    LEAVE: state => state.dataState.LEAVE,
+                    NORTH: state => state.dataState.NORTH,
+                    SOUTH: state => state.dataState.SOUTH,
                     BOTH: state => state.dataState.BOTH,
                 }),
 
             ...
-                mapGetters(['now', 'enterPortData', 'leavePortData', 'timeStart']),
+                mapGetters(['now', 'northData', 'southData', 'timeStart']),
 
 
         }
         ,
         watch: {
-            // ENTER / LEAVE / BOTH
             dataType(v) {
                 this.updateSeries()
             }
             ,
-            leavePortData() {
+            southData() {
                 this.updateSeries()
             }
             ,
-            enterPortData() {
+            northData() {
                 this.updateSeries()
             }
             ,

@@ -1,8 +1,8 @@
 <template>
         <el-table
-                :data="leavePortData"
+                :data="southData"
                 :row-class-name="tableRowClassName"
-                class="customLeaveTable"
+                class="customSouthTable"
                 :default-sort = "{prop: 'minutes', order: 'ascending'}"
                 header-cell-class-name="custom-header-cell"
                 cell-class-name="custom-cell">
@@ -91,7 +91,7 @@
         getters = store.getters
 
     export default {
-        name: "leave-port-table-simple",
+        name: "south-table-simple",
 
         methods: {
             tableRowClassName(v) {
@@ -101,7 +101,7 @@
             formatTime: Formatter.formatTime
         },
         computed: {
-            leavePortData: () => getters.leavePortData
+            southData: () => getters.southData
         },
         filters: {
             time: value => (typeof value === 'number' || value instanceof Number) ? Formatter.formatTime(value) : value,
@@ -110,43 +110,43 @@
     }
 </script>
 <style>
-    .customLeaveTable{
+    .customSouthTable{
         font-size: 15px;
         color: #3d3d3d;
     }
-    .customLeaveTable thead{
+    .customSouthTable thead{
         color: #3d3d3d;
     }
-    .customLeaveTable .row-danger {
+    .customSouthTable .row-danger {
         background-color: rgb(242, 222, 222);
     }
 
-    .customLeaveTable .row-normal {
+    .customSouthTable .row-normal {
         background-color: rgb(223, 240, 216);
     }
-    .customLeaveTable .custom-header-cell{
+    .customSouthTable .custom-header-cell{
         background-color: #99bfe6 !important;
     }
 
-    .customLeaveTable .custom-cell{
+    .customSouthTable .custom-cell{
         padding-top: 4px;
         padding-bottom: 4px;
     }
-    .customLeaveTable .custom-cell .cell {
+    .customSouthTable .custom-cell .cell {
         padding-left: 0px;
         padding-right: 0px;
     }
     
     /*需要加粗的列*/
-    .customLeaveTable .custom-column-arcid,.customLeaveTable .custom-column-status,
-    .customLeaveTable .custom-column-eobt{
+    .customSouthTable .custom-column-arcid,.customSouthTable .custom-column-status,
+    .customSouthTable .custom-column-eobt{
         font-weight: bold;
     }
     
-    .customLeaveTable .descending .sort-caret.descending {
+    .customSouthTable .descending .sort-caret.descending {
         border-top-color: #3d3d3d;
     }
-    .customLeaveTable .ascending .sort-caret.ascending {
+    .customSouthTable .ascending .sort-caret.ascending {
         border-bottom-color: #3d3d3d;
     }
 </style>

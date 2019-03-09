@@ -36,13 +36,13 @@ let store = new Vuex.Store({
 
             // 所有跑道
             trackIds: [1, 19],
-            LEAVE: 0,
-            ENTER: 1,
+            SOUTH: 0,
+            NORTH: 1,
             BOTH: 2
         },
 
         "JNowTime": 1521780180539,
-        "enterPorts": [
+        "north": [
             {
                 "pass1": 1521778485000,
                 "pass2": 1521779700000,
@@ -524,7 +524,7 @@ let store = new Vuex.Store({
                 "eta": 1521790680000
             }
         ],
-        "leavePorts": [
+        "south": [
             {
                 "pass1": 1521779220000,
                 "pass2": 1521779640000,
@@ -2138,25 +2138,25 @@ let store = new Vuex.Store({
     getters: {
         now: state => state.JNowTime,
 
-        // 进出港数据
-        enterPortData: state => state.enterPorts,
-        leavePortData: state => state.leavePorts,
-        // 出港飞机  方向 北
-        leavePortN: (state, getters) => getters.leavePortData.filter(filterByDirection('N')),
-        // 进港飞机  方向 北
-        enterPortN: (state, getters) => getters.enterPortData.filter(filterByDirection('N')),
-        // 出港飞机  方向 南
-        leavePortS: (state, getters) => getters.leavePortData.filter(filterByDirection('S')),
-        // 进港飞机  方向 南
-        enterPortS: (state, getters) => getters.enterPortData.filter(filterByDirection('S')),
-        // 出港飞机  方向 西
-        leavePortW: (state, getters) => getters.leavePortData.filter(filterByDirection('W')),
-        // 进港飞机  方向 西
-        enterPortW: (state, getters) => getters.enterPortData.filter(filterByDirection('W')),
-        // 出港飞机  方向 东
-        leavePortE: (state, getters) => getters.leavePortData.filter(filterByDirection('E')),
-        // 进港飞机  方向 东
-        enterPortE: (state, getters) => getters.enterPortData.filter(filterByDirection('E')),
+        // 南北扇数据
+        northData: state => state.north,
+        southData: state => state.south,
+        // 南扇飞机  方向 北
+        southN: (state, getters) => getters.southData.filter(filterByDirection('N')),
+        // 北扇飞机  方向 北
+        northN: (state, getters) => getters.northData.filter(filterByDirection('N')),
+        // 南扇飞机  方向 南
+        southS: (state, getters) => getters.southData.filter(filterByDirection('S')),
+        // 北扇飞机  方向 南
+        northS: (state, getters) => getters.northData.filter(filterByDirection('S')),
+        // 南扇飞机  方向 西
+        southW: (state, getters) => getters.southData.filter(filterByDirection('W')),
+        // 北扇飞机  方向 西
+        northW: (state, getters) => getters.northData.filter(filterByDirection('W')),
+        // 南扇飞机  方向 东
+        southE: (state, getters) => getters.southData.filter(filterByDirection('E')),
+        // 北扇飞机  方向 东
+        northE: (state, getters) => getters.northData.filter(filterByDirection('E')),
 
 
         // 当前时间减去一小时 = 开始的时间
@@ -2183,9 +2183,6 @@ let store = new Vuex.Store({
         changeHistoryDataType(state, type) {
             state.historyDataType = type
         },
-        test(state) {
-            state.enterPorts = state.enterPorts.slice(0, 5)
-        }
     },
     actions: {
         refreshAllData({state}, trackId) {
@@ -2197,8 +2194,8 @@ let store = new Vuex.Store({
                 .then(handleRequestError)
                 .then((data) => {
                     state.JNowTime = data.JNowTime
-                    state.enterPorts = data.enterPorts
-                    state.leavePorts = data.leavePorts
+                    state.north = data.north
+                    state.south = data.south
                     state.dataState.trackId = data.trackId
                     return state.dataState.trackId
                 })

@@ -67,7 +67,7 @@
             formatTime: Formatter.formatTime
         },
         computed: {
-            leavePortData: () => state.leaveHistory
+            southData: () => state.leaveHistory
         },
         filters: {
             time: value => (typeof value === 'number' || value instanceof Number) ? Formatter.formatTime(value) : value

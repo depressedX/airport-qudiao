@@ -95,8 +95,8 @@
             leaveCount: () => state.leaveHistory.length,
 
             historyDataType: () => state.historyDataType,
-            ENTER: () => state.dataState.ENTER,
-            LEAVE: () => state.dataState.LEAVE,
+            NORTH: () => state.dataState.NORTH,
+            SOUTH: () => state.dataState.SOUTH,
             BOTH: () => state.dataState.BOTH,
 
             historyStart: () => state.historyStart,

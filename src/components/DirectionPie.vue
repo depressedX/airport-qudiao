@@ -27,12 +27,12 @@
                         trigger: 'item',
                         formatter: function (params, ticket, callback) {
                             let header
-                            if (that.dataType === state.dataState.ENTER) {
-                                header = '进港分布--' + params.data.name
-                            } else if (that.dataType === state.dataState.LEAVE) {
-                                header = '出港分布--' + params.data.name
+                            if (that.dataType === state.dataState.NORTH) {
+                                header = '北扇分布--' + params.data.name
+                            } else if (that.dataType === state.dataState.SOUTH) {
+                                header = '南扇分布--' + params.data.name
                             } else {
-                                header = '进出港分布--' + params.data.name
+                                header = '南北扇分布--' + params.data.name
                             }
 
                             return `<div style="text-align: right">${header}<br>${params.data.value}<br>${params.data.content}</div>`;
@@ -99,20 +99,20 @@
         },
         computed: {
             ...mapGetters([
-                'enterPortN',
-                'leavePortN',
-                'enterPortS',
-                'leavePortS',
-                'enterPortW',
-                'leavePortW',
-                'enterPortE',
-                'leavePortE',
-                'leavePortData',
-                'enterPortData',
+                'northN',
+                'southN',
+                'northS',
+                'southS',
+                'northW',
+                'southW',
+                'northE',
+                'southE',
+                'southData',
+                'southData',
             ]),
             dataType: () => state.dataState.dataType,
-            ENTER: () => state.dataState.ENTER,
-            LEAVE: () => state.dataState.LEAVE,
+            NORTH: () => state.dataState.NORTH,
+            SOUTH: () => state.dataState.SOUTH,
             BOTH: () => state.dataState.BOTH,
         },
         watch: {
@@ -120,11 +120,11 @@
                 // 通知更新饼状图数据
                 this.updateSerieData()
             },
-            leavePortData(){
+            southData(){
                 // 通知更新饼状图数据
                 this.updateSerieData()
             },
-            enterPortData(){
+            northData(){
                 // 通知更新饼状图数据
                 this.updateSerieData()
             },
@@ -135,21 +135,21 @@
                 // v:数据集状态
                 // 当数据集状态发生改变时需要改变option
                 let portE, portS, portW, portN
-                if (v === state.dataState.ENTER) {
-                    portE = this.enterPortE
-                    portS = this.enterPortS
-                    portW = this.enterPortW
-                    portN = this.enterPortN
-                } else if (v === state.dataState.LEAVE) {
-                    portE = this.leavePortE
-                    portS = this.leavePortS
-                    portW = this.leavePortW
-                    portN = this.leavePortN
+                if (v === state.dataState.NORTH) {
+                    portE = this.northE
+                    portS = this.northS
+                    portW = this.northW
+                    portN = this.northN
+                } else if (v === state.dataState.SOUTH) {
+                    portE = this.southE
+                    portS = this.southS
+                    portW = this.southW
+                    portN = this.southN
                 } else {
-                    portE = this.leavePortE.concat(this.enterPortE)
-                    portS = this.leavePortS.concat(this.enterPortS)
-                    portW = this.leavePortW.concat(this.enterPortW)
-                    portN = this.leavePortN.concat(this.enterPortN)
+                    portE = this.southE.concat(this.northE)
+                    portS = this.southS.concat(this.northS)
+                    portW = this.southW.concat(this.northW)
+                    portN = this.southN.concat(this.northN)
 
                 }
                 let arrayMap = {

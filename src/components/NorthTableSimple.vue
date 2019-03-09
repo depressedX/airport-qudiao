@@ -1,8 +1,8 @@
 <template>
         <el-table
-                :data="enterPortData"
+                :data="northData"
                 :row-class-name="tableRowClassName"
-                class="customEnterTable"
+                class="customNorthTable"
                 :default-sort = "{prop: 'minutes', order: 'ascending'}"
                 header-cell-class-name="custom-header-cell"
                 cell-class-name="custom-cell"
@@ -10,20 +10,20 @@
             <el-table-column
                     prop="arcid"
                     label="航班号"
-                    min-width="110"
+                    min-width="80"
                     class-name="custom-column-arcid"
                     align="center"
                     sortable/>
             <el-table-column
                     prop="adep"
                     label="起飞机场"
-                    min-width="70"
+                    min-width="50"
                     align="center"
                     sortable/>
             <el-table-column
                     prop="ades"
                     label="目的机场"
-                    min-width="70"
+                    min-width="50"
                     align="center"
                     sortable/>
             <el-table-column
@@ -31,13 +31,13 @@
                     label="状态"
                     class-name="custom-column-status"
                     align="center"
-                    min-width="65"
+                    min-width="40"
                     sortable/>
             <el-table-column
                     prop="atd"
                     label="实际起飞时间"
                     class-name="custom-column-atd"
-                    min-width="60"
+                    min-width="40"
                     align="center"
                     sortable>
                 <template slot-scope="scope">
@@ -47,21 +47,11 @@
             <el-table-column
                     prop="eta"
                     label="预落时间"
-                    min-width="60"
+                    min-width="40"
                     align="center"
                     sortable>
                 <template slot-scope="scope">
                     {{scope.row.eta?scope.row.eta:'' | time}}
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="ata"
-                    label="实际降落时间"
-                    sortable
-                    align="center"
-                    width="60">
-                <template slot-scope="scope">
-                    {{scope.row.ata?scope.row.ata:'' | time}}
                 </template>
             </el-table-column>
             <el-table-column
@@ -70,7 +60,7 @@
                     class-name="custom-column-pass1"
                     sortable
                     align="center"
-                    min-width="60">
+                    min-width="40">
                 <template slot-scope="scope">
                     {{scope.row.pass1?scope.row.pass1:'' | time}}
                 </template>
@@ -80,7 +70,7 @@
                     label="离开时间"
                     sortable
                     align="center"
-                    min-width="60">
+                    min-width="40">
                 <template slot-scope="scope">
                     {{scope.row.pass2?scope.row.pass2:'' | time}}
                 </template>
@@ -90,7 +80,7 @@
                     label="剩余时间"
                     sortable
                     align="center"
-                    min-width="40"/>
+                    min-width="30"/>
         </el-table>
 </template>
 
@@ -103,7 +93,7 @@
         getters = store.getters
 
     export default {
-        name: "enter-port-table",
+        name: "north-table-simple",
 
         methods: {
             tableRowClassName(v) {
@@ -113,7 +103,7 @@
             formatTime: Formatter.formatTime
         },
         computed: {
-            enterPortData: () => getters.enterPortData
+            northData: () => getters.northData
         },
         filters: {
             time: value => (typeof value === 'number' || value instanceof Number) ? Formatter.formatTime(value) : value
@@ -121,39 +111,39 @@
     }
 </script>
 <style>
-    .customEnterTable{
-        font-size: 18px;
+    .customNorthTable{
+        font-size: 15px;
         color: #3d3d3d;
     }
-    .customEnterTable thead{
+    .customNorthTable thead{
         color: #3d3d3d;
     }
-    .customEnterTable .row-danger {
+    .customNorthTable .row-danger {
         background-color: rgb(242, 222, 222);
     }
 
-    .customEnterTable .row-normal {
+    .customNorthTable .row-normal {
         background-color: rgb(223, 240, 216);
     }
-    .customEnterTable .custom-header-cell{
+    .customNorthTable .custom-header-cell{
         background-color: #99bfe6 !important;
     }
-    .customEnterTable .custom-cell{
+    .customNorthTable .custom-cell{
         padding-top: 4px;
         padding-bottom: 4px;
     }
-    .customEnterTable .custom-cell .cell{
-        padding-left: 4px;
-        padding-right: 4px;
+    .customNorthTable .custom-cell .cell{
+        padding-left: 0px;
+        padding-right: 0px;
     }
-    .customEnterTable .custom-column-arcid,.customEnterTable .custom-column-status,
-    .customEnterTable .custom-column-pass1,.customEnterTable .custom-column-atd{
+    .customNorthTable .custom-column-arcid,.customNorthTable .custom-column-status,
+    .customNorthTable .custom-column-pass1,.customNorthTable .custom-column-atd{
         font-weight: bold;
     }
-    .customEnterTable .descending .sort-caret.descending {
+    .customNorthTable .descending .sort-caret.descending {
         border-top-color: #3d3d3d;
     }
-    .customEnterTable .ascending .sort-caret.ascending {
+    .customNorthTable .ascending .sort-caret.ascending {
         border-bottom-color: #3d3d3d;
     }
 </style>

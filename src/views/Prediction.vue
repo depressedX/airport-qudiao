@@ -5,7 +5,7 @@
             <direction-pie class="direction-pie"/>
         </div>
         <h3 style="color: #d95459;font-size: 1.5em;margin:30px 0 0.7em 0;text-align: left;font-weight: 500;"
-            class="row row-2">{{dataType===ENTER?'进港表':(dataType===LEAVE?'出港表':'进港出港表')}}(总数:{{dataNum}}个)</h3>
+            class="row row-2">{{dataType===NORTH?'北扇表':(dataType===SOUTH?'南扇表':'北扇南扇表')}}(总数:{{dataNum}}个)</h3>
         <div class="row row-3">
             <line-port-counting-chart type="line"/>
         </div>
@@ -17,9 +17,9 @@
         </div>
         <!--只在BOTH的时候显示控制按钮-->
         <div class="row row-6" v-if="showSimpleTables">
-            <el-button size="medium" @click="changeShowWhichTable(ENTER)">进港表</el-button>
-            <el-button size="medium" @click="changeShowWhichTable(LEAVE)">出港表</el-button>
-            <el-button size="medium" @click="changeShowWhichTable(BOTH)">出港进港表</el-button>
+            <el-button size="medium" @click="changeShowWhichTable(NORTH)">北扇表</el-button>
+            <el-button size="medium" @click="changeShowWhichTable(SOUTH)">南扇表</el-button>
+            <el-button size="medium" @click="changeShowWhichTable(BOTH)">南扇北扇表</el-button>
         </div>
         <div class="row simple-table-container" v-if="showSimpleTables">
             <enter-port-table-simple
@@ -41,13 +41,13 @@
     import DirectionPie from '../components/DirectionPie'
     import LinePortCountingChart from '../components/PortCountingChart'
     import DirectionImg from '../components/DirectionImg'
-    import EnterPortTable from '../components/EnterPortTable'
-    import LeavePortTable from '../components/LeavePortTable'
+    import EnterPortTable from '../components/NorthTable'
+    import LeavePortTable from '../components/SouthTable'
     import {PermissionDenied} from "../errors";
 
     import store from '../store/store'
-    import EnterPortTableSimple from "../components/EnterPortTableSimple";
-    import LeavePortTableSimple from "../components/LeavePortTableSimple";
+    import EnterPortTableSimple from "../components/NorthTableSimple";
+    import LeavePortTableSimple from "../components/SouthTableSimple";
 
     let state = store.state,
         getters = store.getters
@@ -86,17 +86,17 @@
 
             dataType: () => state.dataState.dataType,
 
-            ENTER: () => state.dataState.ENTER,
-            LEAVE: () => state.dataState.LEAVE,
+            NORTH: () => state.dataState.NORTH,
+            SOUTH: () => state.dataState.SOUTH,
             BOTH: () => state.dataState.BOTH,
 
             dataNum() {
-                if (this.dataType === this.ENTER) {
-                    return getters.enterPortData.length
-                } else if (this.dataType === this.LEAVE) {
-                    return getters.leavePortData.length
+                if (this.dataType === this.NORTH) {
+                    return getters.northData.length
+                } else if (this.dataType === this.SOUTH) {
+                    return getters.southData.length
                 } else {
-                    return getters.enterPortData.length + getters.leavePortData.length
+                    return getters.northData.length + getters.southData.length
                 }
             },
 
@@ -105,16 +105,16 @@
             },
 
             showSimpleEnterTable() {
-                return this.showSimpleTables && (this.showWhichTable === this.ENTER || this.showWhichTable === this.BOTH)
+                return this.showSimpleTables && (this.showWhichTable === this.NORTH || this.showWhichTable === this.BOTH)
             },
             showSimpleLeaveTable() {
-                return this.showSimpleTables && (this.showWhichTable === this.LEAVE || this.showWhichTable === this.BOTH)
+                return this.showSimpleTables && (this.showWhichTable === this.SOUTH || this.showWhichTable === this.BOTH)
             },
             showEnterTable(){
-                return !this.showSimpleTables && this.dataType === this.ENTER
+                return !this.showSimpleTables && this.dataType === this.NORTH
             },
             showLeaveTable(){
-                return !this.showSimpleTables && this.dataType === this.LEAVE
+                return !this.showSimpleTables && this.dataType === this.SOUTH
             },
 
         },

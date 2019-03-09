@@ -3,10 +3,10 @@
         width: '839px',
         height: '514px',
         'background-image':`url(${baseImg})`}">
-        <img :src="leaveECount<=10?GE:(ECount<=15?YE:RE)" class="direction-E"/>
-        <img :src="leaveWCount<=10?GW:(WCount<=15?YW:RW)" class="direction-W"/>
-        <img :src="leaveSCount<=10?GS:(SCount<=15?YS:RS)" class="direction-S"/>
-        <img :src="leaveNCount<=10?GN:(NCount<=15?YN:RN)" class="direction-N"/>
+        <img :src="southECount<=10?GE:(ECount<=15?YE:RE)" class="direction-E"/>
+        <img :src="southWCount<=10?GW:(WCount<=15?YW:RW)" class="direction-W"/>
+        <img :src="southSCount<=10?GS:(SCount<=15?YS:RS)" class="direction-S"/>
+        <img :src="southNCount<=10?GN:(NCount<=15?YN:RN)" class="direction-N"/>
     </div>
 </template>
 
@@ -44,54 +44,54 @@
         },
         computed: {
             dataType:()=>state.dataState.dataType,
-            ENTER:()=>state.dataState.ENTER,
-            LEAVE:()=>state.dataState.LEAVE,
+            NORTH:()=>state.dataState.NORTH,
+            SOUTH:()=>state.dataState.SOUTH,
             BOTH:()=>state.dataState.BOTH,
 
-            leaveECount: () => getters.leavePortE.length,
-            leaveNCount: () => getters.leavePortN.length,
-            leaveSCount: () => getters.leavePortS.length,
-            leaveWCount: () => getters.leavePortW.length,
+            southECount: () => getters.southE.length,
+            southNCount: () => getters.southN.length,
+            southSCount: () => getters.southS.length,
+            southWCount: () => getters.southW.length,
 
-            enterECount: () => getters.enterPortE.length,
-            enterNCount: () => getters.enterPortN.length,
-            enterSCount: () => getters.enterPortS.length,
-            enterWCount: () => getters.enterPortW.length,
+            northECount: () => getters.northE.length,
+            northNCount: () => getters.northN.length,
+            northSCount: () => getters.northS.length,
+            northWCount: () => getters.northW.length,
 
             ECount(){
-                if (this.dataType === this.ENTER) {
-                    return this.enterECount
-                } else if(this.dataType === this.LEAVE){
-                    return this.leaveECount
+                if (this.dataType === this.NORTH) {
+                    return this.northECount
+                } else if(this.dataType === this.SOUTH){
+                    return this.southECount
                 }else {
-                    return this.enterECount + this.leaveECount
+                    return this.northECount + this.southECount
                 }
             },
             NCount(){
-                if (this.dataType === this.ENTER) {
-                    return this.enterNCount
-                } else if(this.dataType === this.LEAVE){
-                    return this.leaveNCount
+                if (this.dataType === this.NORTH) {
+                    return this.northNCount
+                } else if(this.dataType === this.SOUTH){
+                    return this.southNCount
                 }else {
-                    return this.enterNCount + this.leaveNCount
+                    return this.northNCount + this.southNCount
                 }
             },
             SCount(){
-                if (this.dataType === this.ENTER) {
-                    return this.enterSCount
-                } else if(this.dataType === this.LEAVE){
-                    return this.leaveSCount
+                if (this.dataType === this.NORTH) {
+                    return this.northSCount
+                } else if(this.dataType === this.SOUTH){
+                    return this.southSCount
                 }else {
-                    return this.enterSCount + this.leaveSCount
+                    return this.northSCount + this.southSCount
                 }
             },
             WCount(){
-                if (this.dataType === this.ENTER) {
-                    return this.enterWCount
-                } else if(this.dataType === this.LEAVE){
-                    return this.leaveWCount
+                if (this.dataType === this.NORTH) {
+                    return this.northWCount
+                } else if(this.dataType === this.SOUTH){
+                    return this.southWCount
                 }else {
-                    return this.enterWCount + this.leaveWCount
+                    return this.northWCount + this.southWCount
                 }
             },
         }

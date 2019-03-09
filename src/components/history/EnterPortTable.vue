@@ -76,7 +76,7 @@
             formatTime: Formatter.formatTime
         },
         computed: {
-            enterPortData: () => state.enterHistory
+            northData: () => state.enterHistory
         },
         filters: {
             time: value => (typeof value === 'number' || value instanceof Number) ? Formatter.formatTime(value) : value

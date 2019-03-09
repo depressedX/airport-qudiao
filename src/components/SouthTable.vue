@@ -1,29 +1,28 @@
 <template>
         <el-table
-                :data="enterPortData"
+                :data="southData"
                 :row-class-name="tableRowClassName"
-                class="customEnterTable"
+                class="customSouthTable"
                 :default-sort = "{prop: 'minutes', order: 'ascending'}"
                 header-cell-class-name="custom-header-cell"
-                cell-class-name="custom-cell"
-                >
+                cell-class-name="custom-cell">
             <el-table-column
                     prop="arcid"
                     label="航班号"
-                    min-width="80"
+                    min-width="110"
                     class-name="custom-column-arcid"
                     align="center"
                     sortable/>
             <el-table-column
                     prop="adep"
                     label="起飞机场"
-                    min-width="50"
+                    min-width="70"
                     align="center"
                     sortable/>
             <el-table-column
                     prop="ades"
                     label="目的机场"
-                    min-width="50"
+                    width="70"
                     align="center"
                     sortable/>
             <el-table-column
@@ -31,36 +30,36 @@
                     label="状态"
                     class-name="custom-column-status"
                     align="center"
-                    min-width="40"
+                    min-width="65"
                     sortable/>
             <el-table-column
-                    prop="atd"
-                    label="实际起飞时间"
-                    class-name="custom-column-atd"
-                    min-width="40"
+                    prop="eobt"
+                    label="预起时间"
+                    class-name="custom-column-eobt"
+                    min-width="120"
                     align="center"
                     sortable>
                 <template slot-scope="scope">
-                    {{scope.row.atd?scope.row.atd:'未起飞' | time}}
+                    {{scope.row.eobt?scope.row.eobt:'' | date}}<br>
+                    {{scope.row.eobt?scope.row.eobt:'' | time}}
                 </template>
             </el-table-column>
             <el-table-column
-                    prop="eta"
-                    label="预落时间"
-                    min-width="40"
+                    prop="atd"
+                    label="实飞时间"
+                    min-width="60"
                     align="center"
                     sortable>
                 <template slot-scope="scope">
-                    {{scope.row.eta?scope.row.eta:'' | time}}
+                    {{scope.row.atd?scope.row.atd:'' | time}}
                 </template>
             </el-table-column>
             <el-table-column
                     prop="pass1"
                     label="进入时间"
-                    class-name="custom-column-pass1"
-                    sortable
+                    min-width="60"
                     align="center"
-                    min-width="40">
+                    sortable>
                 <template slot-scope="scope">
                     {{scope.row.pass1?scope.row.pass1:'' | time}}
                 </template>
@@ -68,9 +67,9 @@
             <el-table-column
                     prop="pass2"
                     label="离开时间"
-                    sortable
+                    min-width="60"
                     align="center"
-                    min-width="40">
+                    sortable>
                 <template slot-scope="scope">
                     {{scope.row.pass2?scope.row.pass2:'' | time}}
                 </template>
@@ -78,9 +77,9 @@
             <el-table-column
                     prop="minutes"
                     label="剩余时间"
-                    sortable
+                    min-width="60"
                     align="center"
-                    min-width="30"/>
+                    sortable/>
         </el-table>
 </template>
 
@@ -93,7 +92,7 @@
         getters = store.getters
 
     export default {
-        name: "enter-port-table-simple",
+        name: "south-table",
 
         methods: {
             tableRowClassName(v) {
@@ -103,47 +102,52 @@
             formatTime: Formatter.formatTime
         },
         computed: {
-            enterPortData: () => getters.enterPortData
+            southData: () => getters.southData
         },
         filters: {
-            time: value => (typeof value === 'number' || value instanceof Number) ? Formatter.formatTime(value) : value
+            time: value => (typeof value === 'number' || value instanceof Number) ? Formatter.formatTime(value) : value,
+            date: value => (typeof value === 'number' || value instanceof Number) ? Formatter.formatDate(value) : value,
         }
     }
 </script>
 <style>
-    .customEnterTable{
-        font-size: 15px;
+    .customSouthTable{
+        font-size: 18px;
         color: #3d3d3d;
     }
-    .customEnterTable thead{
+    .customSouthTable thead{
         color: #3d3d3d;
     }
-    .customEnterTable .row-danger {
+    .customSouthTable .row-danger {
         background-color: rgb(242, 222, 222);
     }
 
-    .customEnterTable .row-normal {
+    .customSouthTable .row-normal {
         background-color: rgb(223, 240, 216);
     }
-    .customEnterTable .custom-header-cell{
+    .customSouthTable .custom-header-cell{
         background-color: #99bfe6 !important;
     }
-    .customEnterTable .custom-cell{
+
+    .customSouthTable .custom-cell{
         padding-top: 4px;
         padding-bottom: 4px;
     }
-    .customEnterTable .custom-cell .cell{
-        padding-left: 0px;
-        padding-right: 0px;
+    .customSouthTable .custom-cell .cell {
+        padding-left: 4px;
+        padding-right: 4px;
     }
-    .customEnterTable .custom-column-arcid,.customEnterTable .custom-column-status,
-    .customEnterTable .custom-column-pass1,.customEnterTable .custom-column-atd{
+    
+    /*需要加粗的列*/
+    .customSouthTable .custom-column-arcid,.customSouthTable .custom-column-status,
+    .customSouthTable .custom-column-eobt{
         font-weight: bold;
     }
-    .customEnterTable .descending .sort-caret.descending {
+    
+    .customSouthTable .descending .sort-caret.descending {
         border-top-color: #3d3d3d;
     }
-    .customEnterTable .ascending .sort-caret.ascending {
+    .customSouthTable .ascending .sort-caret.ascending {
         border-bottom-color: #3d3d3d;
     }
 </style>
