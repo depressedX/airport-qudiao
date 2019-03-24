@@ -10,13 +10,24 @@ import store from './store/store'
 
 Vue.config.productionTip = false
 
-// 每隔5分钟刷新一下数据
-setInterval(()=>store.dispatch('refreshAllData'),5*60*1000)
+import {onNowTimeChange} from "./store/updator";
+
 
 Vue.use(VueRouter)
 Vue.use(ElementUI);
-new Vue({
+let app = new Vue({
     store,
     render: h => h(App),
-    router
+    router,
+    computed:{
+        now:()=>store.getters.now
+    },
+    watch:{
+        now:{
+            handler:function(){
+                onNowTimeChange()
+            },
+            immediate:true
+        }
+    }
 }).$mount('#app')

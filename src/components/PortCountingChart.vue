@@ -48,10 +48,17 @@
                         formatter(params, ticket) {
 
                             return `${params[0].axisValue}后<br>`
-                                + params.map(
-                                    v => `${v.seriesName}:${v.data}<br>${(v.seriesName === '北扇' ? that.mapedNorthData : that.mapedSouthData).content[v.dataIndex].join('<br>')}`
-                                )
-                                    .join('<br>')
+                                + params
+                                    .filter(v => ['南扇', '北扇'].some(vv => vv === v.seriesName))
+                                    .map(
+                                        v => `
+                                        ${v.seriesName}:${v.data}<br>
+${(v.seriesName === '北扇' ? that.mapedNorthData : that.mapedSouthData).content[v.dataIndex]
+                                            .map(({value, isUnderControl}) => `
+<span ${isUnderControl ? 'style="color: red"' : ''}>${value}</span>
+`
+                                            ).join('<br>')}`
+                                    ).join('<br>')
                         }
                     },
                     grid: {
@@ -78,11 +85,26 @@
                         }
                     ],
                     yAxis: that.type === 'line' ?
+                        // [
+                        //     {
+                        //         type: 'category',
+                        //         boundaryGap: false,
+                        //         data: Array.from({length: 30}).map((v, i) => i),
+                        //         axisLabel: {
+                        //             show: true,
+                        //             interval: 0,
+                        //             rotate: 0,
+                        //             margin: 10,
+                        //         }
+                        //     }
+                        // ] :
                         [
                             {
-                                type: 'category',
+                                type: 'value',
                                 boundaryGap: false,
-                                data: Array.from({length: 20}).map((v, i) => i),
+                                min: 0,
+                                max: 30,
+                                interval: 1,
                                 axisLabel: {
                                     show: true,
                                     interval: 0,
@@ -90,13 +112,13 @@
                                     margin: 10,
                                 }
                             }
-                        ] :
+                        ]:
                         [
                             {
                                 type: 'value',
                                 boundaryGap: false,
                                 min: 0,
-                                max: 20,
+                                max: 30,
                                 interval: 1,
                                 axisLabel: {
                                     show: true,
@@ -121,6 +143,16 @@
                             stack: this.type + (this.type === 'bar' ? '' : '2'),
                             get data() {
                                 return that.dataType === that.SOUTH ? [] : that.mapedNorthData.num
+                            }
+                        },
+                        // 对于折线图显示总数
+                        {
+                            name: '南北扇',
+                            type: this.type,
+                            stack: this.type + (this.type === 'bar' ? '' : '3'),
+                            get data() {
+                                return that.dataType === that.BOTH && that.type === 'line' ?
+                                    that.mapedSouthData.num.map((v, i) => v + that.mapedNorthData.num[i]) : []
                             }
                         }
                     ],
@@ -152,18 +184,27 @@
             // 将飞行数据按duration和step映射到X轴上   返回{num:[],content:[]}
             mapPortData(arr) {
                 let res = {num: [], content: []}
-                for (let i = 0; i < Math.floor((this.duration+1) * 60 / this.step) + 1; i++) {
+                for (let i = 0; i < Math.floor((this.duration + 1) * 60 / this.step) + 1; i++) {
                     res.num[i] = 0
                     res.content[i] = []
                 }
+                const MAX_INDEX = res.num.length - 1
+                // 当前时间所在的序号
+                let nowIndex = Math.ceil((this.now - this.timeStart) / this.step / 60 / 1000)
                 arr.forEach(v => {
                     let startIndex = Math.ceil((this.now + v.minutes * 60 * 1000 - this.timeStart) / this.step / 60 / 1000),
                         endIndex = Math.ceil((this.now + v.minutes * 60 * 1000 + v.interval * 60 * 1000 - this.timeStart) / this.step / 60 / 1000)
                     startIndex = Math.max(startIndex, 0)
-                    endIndex = Math.min(endIndex, Math.floor((this.duration+1) * 60 / this.step) + 1)
+                    endIndex = Math.min(endIndex, MAX_INDEX + 1)
+                    if (startIndex > MAX_INDEX || endIndex < 0) {
+                        return
+                    }
+                    // 对于不足一个点的做一下特殊处理
+                    endIndex = Math.max(endIndex, startIndex + 1)
+                    let isUnderControl = startIndex <= nowIndex && nowIndex < endIndex
                     for (let i = startIndex; i < endIndex; i++) {
                         res.num[i]++
-                        res.content[i].push(v.arcid)
+                        res.content[i].push({value: v.arcid, isUnderControl})
                     }
                 })
                 return res
@@ -177,7 +218,7 @@
 
 
                 // 更改当前时间显示轴
-                this.option.series[2] = {
+                this.option.series[3] = {
                     name: '当前时间',
                     type: 'line',
                     markLine: {
@@ -248,6 +289,9 @@
                 this.updateAxisX()
             }
             ,
+            now() {
+                this.updateAxisX()
+            }
         }
     }
 </script>

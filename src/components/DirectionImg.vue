@@ -1,5 +1,6 @@
 <template>
     <div class="direction-img" :style="{
+        margin:'auto',
         width: '839px',
         height: '514px',
         'background-image':`url(${baseImg})`}">
